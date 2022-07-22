@@ -19,6 +19,7 @@ import xml.etree.ElementTree
 from functools import reduce
 from itertools import zip_longest
 from typing import Text, Dict, Any
+from urllib.parse import unquote
 
 from dicttoxml import dicttoxml
 from lxml import etree
@@ -145,8 +146,25 @@ class DataHand:
         return {key.upper(): value for key, value in origin_dict.items()}
 
     @staticmethod
+    def list_to_dict(origin_list):
+        """
+        list转dict
+        :param origin_list: (list) [{"name": "v", "value": "1"},{"name": "w", "value": "2"}]
+        :return: dict:{"v": "1", "w": "2"}
+        """
+        return {item["name"]: item.get("value") for item in origin_list}
+
+    @staticmethod
     def omit_long_data(body, omit_len=512):
-        """omit too long str/bytes"""
+        """
+        omit too long str/bytes
+        Args:
+            body:
+            omit_len:
+
+        Returns:
+
+        """
         if not isinstance(body, (str, bytes)):
             return body
 
@@ -164,7 +182,14 @@ class DataHand:
 
     @staticmethod
     def get_raw_md5(data):
-        """计算md5 md5的输入必须为bytes"""
+        """
+        计算md5 md5的输入必须为bytes
+        Args:
+            data:
+
+        Returns:
+
+        """
         m2 = hashlib.md5(DataHand.to_bytes(data))
         etag = '"' + str(m2.hexdigest()) + '"'
         return etag
@@ -185,7 +210,14 @@ class DataHand:
 
     @staticmethod
     def get_content_md5(body):
-        """计算任何输入流的md5值"""
+        """
+        计算任何输入流的md5值
+        Args:
+            body:
+
+        Returns:
+
+        """
         if isinstance(body, text_type) or isinstance(body, binary_type):
             return DataHand.get_md5(body)
         elif hasattr(body, 'tell') and hasattr(body, 'seek') and hasattr(body, 'read'):
@@ -208,7 +240,14 @@ class DataHand:
 
     @staticmethod
     def dict_to_xml(data):
-        """V5使用xml格式，将输入的dict转换为xml"""
+        """
+        V5使用xml格式，将输入的dict转换为xml
+        Args:
+            data:
+
+        Returns:
+
+        """
         doc = xml.dom.minidom.Document()
         root = doc.createElement('CompleteMultipartUpload')
         doc.appendChild(root)
@@ -238,7 +277,16 @@ class DataHand:
 
     @staticmethod
     def xml_to_dict(data, origin_str="", replace_str=""):
-        """V5使用xml格式，将response中的xml转换为dict"""
+        """
+        V5使用xml格式，将response中的xml转换为dict
+        Args:
+            data:
+            origin_str:
+            replace_str:
+
+        Returns:
+
+        """
         root = xml.etree.ElementTree.fromstring(data)
         xmldict = Xml2Dict(root)
         xmlstr = str(xmldict)
@@ -249,7 +297,15 @@ class DataHand:
 
     @staticmethod
     def get_id_from_xml(data, name):
-        """解析xml中的特定字段"""
+        """
+        解析xml中的特定字段
+        Args:
+            data:
+            name:
+
+        Returns:
+
+        """
         tree = xml.dom.minidom.parseString(data)
         root = tree.documentElement
         result = root.getElementsByTagName(name)
@@ -258,7 +314,17 @@ class DataHand:
 
     @staticmethod
     def format_xml(data, root, lst=list(), parent_child=False):
-        """将dict转换为xml, xml_config是一个bytes"""
+        """
+        将dict转换为xml, xml_config是一个bytes
+        Args:
+            data:
+            root:
+            lst:
+            parent_child:
+
+        Returns:
+
+        """
         if parent_child:
             xml_config = dicttoxml(data, item_func=lambda x: x[:-1], custom_root=root, attr_type=False)
         else:
@@ -269,7 +335,14 @@ class DataHand:
 
     @staticmethod
     def format_values(data):
-        """格式化headers和params中的values为bytes"""
+        """
+        格式化headers和params中的values为bytes
+        Args:
+            data:
+
+        Returns:
+
+        """
         for i in data:
             data[i] = DataHand.to_bytes(data[i])
         return data
@@ -282,8 +355,8 @@ class DataHand:
             target_data:
         Returns:
         Examples:
-            >>> list = ["1235678",{"key1":"value", "key2":"value"}]
-            >>> DataHand.is_json()
+            >>> target_data_ = ["1235678",{"key1":"value", "key2":"value"}]
+            >>> DataHand.is_json(target_data_)
         """
         if isinstance(target_data, str):
             try:
@@ -307,14 +380,14 @@ class DataHand:
         Examples:
             >>> repetition_list = [3, 4, 5, 2, 4, 1]
             # 正序去重
-            >>> print(DataHand.duplicate(repetition_list))
+            >>> DataHand.duplicate(repetition_list)
             # 逆序去重
-            >>> print(DataHand.duplicate(repetition_list, reverse=True))
+            >>> DataHand.duplicate(repetition_list, reverse=True)
             # 指定规则去重
             >>> repetition_list = [{"a": 3, "b": 4}, {"a":3, "b": 5}]
-            >>> print(DataHand.duplicate(repetition_list, key=lambda x: x["a"]))
+            >>> DataHand.duplicate(repetition_list, key=lambda x: x["a"])
             # 去重后仅保留部分数据
-            >>> print(DataHand.duplicate(repetition_list, key=lambda x: x["a"], keep=lambda x: x["b"]))
+            >>> DataHand.duplicate(repetition_list, key=lambda x: x["a"], keep=lambda x: x["b"])
         """
         result = list()
         duplicator = list()
@@ -336,8 +409,8 @@ class DataHand:
             iter:
         Returns:
         Examples:
-            >>> print(DataHand.chain_all([[1, 2], [1, 2]]))
-            >>> print(DataHand.chain_all([{"a": 1}, {"b": 2}]))
+            >>> DataHand.chain_all([[1, 2], [1, 2]])
+            >>> DataHand.chain_all([{"a": 1}, {"b": 2}])
         """
         iter = list(iter)
         if not iter:
@@ -395,7 +468,7 @@ class DataHand:
         )
 
     @staticmethod
-    def data_type_convert(original, target_type):
+    def data_type_convert(original: [str, dict], target_type: str):
         """
         数据类型转化
         Args:
@@ -403,32 +476,38 @@ class DataHand:
             target_type:
         Returns:
         Examples:
-            # 将两个相同长度的列表转换成字典
-            >>> print(DataHand.data_type_convert(original=(["key1","key2"],["value1","value2"]), target_type="dict"))
-            # 将两个不同长度的列表转换成字典
-            >>> print(DataHand.data_type_convert(original=(["key1","key2","key3"],["value1","value2"]), target_type="dict"))
-            # 将json转化为字典
-            >>> print(DataHand.data_type_convert(original='{"errcode": 401,"errmsg": "[POST]","data": null}', target_type="dict"))
-            # 将dict转化为json
-            >>> print(DataHand.data_type_convert(original={'errcode': 401,'errmsg': 'POST','data': True}, target_type="json"))
-            # 将字典列表转换为单个字典
-            >>> print(DataHand.data_type_convert(original=[{"errcode": 401},{"errmsg": "[POST]","data": True}], target_type="dict"))
+            将两个相同长度的列表转换成字典
+            >>> original_1 = (["key1","key2"],["value1","value2"])
+            >>> DataHand.data_type_convert(original=original_1, target_type="dict")
+            将两个不同长度的列表转换成字典
+            >>> original_2 = (["key1","key2","key3"],["value1","value2"])
+            >>> DataHand.data_type_convert(original=original_2, target_type="dict")
+            将dict转化为dict
+            >>> original_3 = {"errcode": 401,"errmsg": "[POST]","data": None}
+            >>> DataHand.data_type_convert(original=original_3, target_type="dict")
+            将json转化为json
+            >>> DataHand.data_type_convert(original=json.dumps(original_3), target_type="json")
+            将json转化为字典
+            >>> DataHand.data_type_convert(original=json.dumps(original_3), target_type="dict")
+            将字典列表转换为单个字典
+            >>> original_4 = [{"errcode": 401},original_3]
+            >>> DataHand.data_type_convert(original=original_4, target_type="dict")
         """
-        if isinstance(original, dict) and target_type == "json":
-            return json.dumps(original)
-        elif isinstance(original, tuple) and target_type == "dict":
+        if isinstance(original, tuple):
             is_equal_bool = True if len(original[0]) == len(original[1]) else False
             if is_equal_bool:
-                return dict(original)
+                result = dict(original)
             else:
-                return dict(zip_longest(original[0], original[1]))
-        elif isinstance(original, list) and target_type == "dict":
-            temp = {}
+                result = dict(zip_longest(original[0], original[1]))
+        elif isinstance(original, list):
+            result = {}
             for index in original:
-                temp.update(index)
-            return temp
-        elif DataHand.is_json(original) and target_type == "dict":
-            return json.loads(original)
+                result.update(index)
+        elif DataHand.is_json(original):
+            result = json.loads(original)
+        else:
+            result = original
+        return json.dumps(result) if target_type == "json" else result
 
     @staticmethod
     def parser(keyword):
@@ -438,7 +517,7 @@ class DataHand:
             keyword:
         Returns:
         Examples:
-            >>> print(DataHand.parser(keyword="55588ABCEACE"))
+            >>> DataHand.parser(keyword="55588ABE")
         """
         vals_mapping = dict()
         indices_mapping = dict()
@@ -459,7 +538,7 @@ class DataHand:
             money_num:
         Returns:
         Examples:
-            >>> print(DataHand.charged(13, [1, 3, 5]))
+            >>> DataHand.charged(13, [1, 3, 5])
         """
         if pay_num == 0:
             return 0
@@ -481,6 +560,47 @@ class DataHand:
                 yield DataHand.charged(last_num, money_num)
             except ValueError:
                 continue
+
+    @staticmethod
+    def dict_to_from(raw_data):
+        """
+        字典转xwww-from格式
+        Args:
+            raw_data:
+
+        Returns:
+        Examples:
+            >>> raw_data_ = {"a": 1, "b":2}
+            ... DataHand.dict_to_from(raw_data_)
+        """
+        if isinstance(raw_data, dict):
+            return "&".join(["{}={}".format(key, value) for key, value in raw_data.items()])
+        else:
+            return raw_data
+
+    @staticmethod
+    def form_to_dict(raw_data):
+        """
+        x-www-from格式转字典
+        Args:
+            raw_data:
+
+        Returns:
+        Examples:
+            >>> raw_data_ = "a=1&b=2"
+            >>> DataHand.form_to_dict(raw_data_)
+        """
+        if isinstance(raw_data, str):
+            converted_dict = {}
+            for k_v in raw_data.split("&"):
+                try:
+                    key, value = k_v.split("=")
+                except ValueError:
+                    raise Exception("Invalid x_www_form_urlencoded data format: {}".format(raw_data))
+                converted_dict[key] = unquote(value)
+            return converted_dict
+        else:
+            return raw_data
 
 
 class HtmlHand:
