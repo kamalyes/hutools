@@ -13,12 +13,13 @@
 
 class BatchTask:
     @staticmethod
-    def list_jobs(func_name, context):
+    def list_jobs(func_name, context, call_back=False):
         """
         批量任务处理
         Args:
             func_name:
             context:
+            call_back: False
         Returns:
         Examples:
             >>> examples = [False, True, 1]
@@ -32,7 +33,10 @@ class BatchTask:
         if not isinstance(context, list):
             context = [context]
         for index in context:
-            if func_name.__call__(index):
+            exec_result = func_name.__call__(index)
+            if call_back:
+                print(exec_result)
+            if exec:
                 accord.append(index)
             else:
                 no_accord.append(index)

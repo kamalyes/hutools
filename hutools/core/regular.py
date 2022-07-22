@@ -39,6 +39,23 @@ class RegEx:
         )
 
     @staticmethod
+    def date_validator(value: str) -> bool:
+        """
+        # 判断是否是日期字符串
+        """
+        value = value.strip()
+        try:
+            if len(value) == 10:
+                datetime.strptime(value, '%Y-%m-%d')
+                return True
+            elif len(value) == 19:
+                datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                return True
+        except ValueError:
+            pass
+        return False
+
+    @staticmethod
     def match_double_byte_str(context: Any) -> bool:
         """
         效验是否存在双字节

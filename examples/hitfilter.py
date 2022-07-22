@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # !/usr/bin/env python 3.9.11
 """
-@File    :  kaptcha.py
+@File    :  captcha.py
 @Time    :  2022/5/20 2:52 AM
 @Author  :  YuYanQing
 @Version :  1.0

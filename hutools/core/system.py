@@ -134,3 +134,14 @@ class System:
                     for row in reader:
                         csv_content_list.append(row)
                 return csv_content_list
+
+    @staticmethod
+    def str_decode(data):
+        try:
+            data = data.decode()
+        except UnicodeDecodeError:
+            try:
+                data = data.decode(encoding='GBK')
+            except UnicodeDecodeError:
+                data = data.decode(errors='ignore')
+        return data

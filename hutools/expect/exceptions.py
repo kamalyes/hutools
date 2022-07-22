@@ -12,6 +12,11 @@
 from hutools.script.compat import FileNotFoundError
 
 
+class ParseError(BaseException):
+    def __init__(self, message):
+        self.message = message
+
+
 class MyBaseFailure(Exception):
     pass
 

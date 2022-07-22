@@ -30,6 +30,27 @@ SINGLE_UPLOAD_LENGTH = 5 * 1024 * 1024 * 1024  # 单次上传文件最大为5GB
 DEFAULT_CHUNK_SIZE = 1024 * 1024  # 计算MD5值时,文件单次读取的块大小为1MB
 
 
+class AttrDict(dict):
+    """
+    继承自dict，实现可以通过.来操作元素
+    Examples:
+        >>> attr_dict = AttrDict(data=56999, step=0, s_status='process', status=0)
+        >>> print(attr_dict.data)
+    """
+
+    def __setattr__(self, key, value):
+        self.__setitem__(key, value)
+
+    def __getattr__(self, item):
+        try:
+            return self.__getitem__(item)
+        except KeyError:
+            raise AttributeError(item)
+
+    def __delattr__(self, item):
+        self.__delitem__(item)
+
+
 class DataHand:
     @staticmethod
     def to_str(variable):
@@ -59,7 +80,7 @@ class DataHand:
         return variable
 
     @staticmethod
-    def deep_dict_update(main_dict: Dict[Any, Any], update_dict: Dict[Any, Any]) -> None:
+    def deep_dict_update(main_dict: Dict[Any, Any], update_dict: Dict[Any, Any]) -> dict[Any, Any]:
         """
         字典更新
         Args:

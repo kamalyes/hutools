@@ -31,22 +31,16 @@ Hutools的存在就是为了减少代码搜索成本，避免网络上参差不�
 | Hutools-core      |     核心，包括Bean操作、各种Util等                                          |
 | Hutools-cron      |     定时任务模块，提供类Crontab表达式的定时任务                                     |
 | Hutools-crypto    |     加密解密模块，提供对称、非对称和摘要算法封装                                     |
-| Hutools-db        |     JDBC封装后的数据操作，基于ActiveRecord思想                                    |
-| Hutools-dfa       |     基于DFA模型的多关键字查找                                                    |
 | Hutools-extra     |     扩展模块，对第三方封装（模板引擎、邮件、Servlet、二维码、Emoji、FTP、分词等）       |
-| Hutools-http      |     基于HttpUrlConnection的Http客户端封装                                       |
 | Hutools-log       |     自动识别日志实现的日志门面                                                    |
 | Hutools-script    |     脚本执行封装，例如Pythonscript                                                 |
 | Hutools-hitfilter |     敏感词过滤器                                   |
 | Hutools-limiter   |     拦截器                                   |
 | Hutools-time      |     日期                                    |
-| Hutools-setting   |     功能更强大的Setting配置文件和Properties封装                                   |
 | Hutools-system    |     系统参数调用封装（JVM信息等）                                                 |
 | Hutools-json      |     JSON实现                                                                  |
-| Hutools-kaptcha   |     图片验证码实现                                                              |
+| Hutools-captcha   |     图片验证码实现                                                              |
 | Hutools-poi       |     针对POI中Excel和Word的封装                                                  |
-| Hutools-socket    |     基于Python的NIO和AIO的Socket封装                                              |
-| Hutools-jwt       |     JSON Web Token (JWT)封装实现                                               |
 
 可以根据需求对每个模块单独引入，也可以通过引入`hutools-all`方式引入所有模块。
 
