@@ -58,7 +58,7 @@ def _finalize_pubkey_algorithm(self, key_type):
 AuthHandler._finalize_pubkey_algorithm = _finalize_pubkey_algorithm
 
 
-class SSH:
+class SSHManger:
     def __init__(self, hostname, port=22, username='root', pkey=None, password=None, default_env=None,
                  connect_timeout=10, term=None):
         self.stdout = None

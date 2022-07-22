@@ -16,7 +16,7 @@ import threading
 import redis
 
 
-class RedisClient(object):
+class RedisManger(object):
     """
     py2.7, py3.7
     """

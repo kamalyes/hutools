@@ -9,6 +9,7 @@
 @License :  (C)Copyright 2022-2026
 @Desc    :  None
 """
+
 import os
 import shutil
 from datetime import datetime
@@ -17,7 +18,7 @@ from tempfile import NamedTemporaryFile
 from git import Repo, RemoteReference, TagReference, InvalidGitRepositoryError, GitCommandError
 
 
-class Git:
+class GitManger:
     def __init__(self, git_repo, repo_dir, pkey=None):
         self.git_repo = git_repo
         self.repo_dir = repo_dir

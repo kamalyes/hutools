@@ -107,7 +107,7 @@ class Moment:
             today = datetime.now()
         return (
                 today
-                + datetime.timedelta(
+                + datetime_.timedelta(
             days, seconds, microseconds, milliseconds, minutes, hours, weeks
         )
         ).strftime(time_format_str)

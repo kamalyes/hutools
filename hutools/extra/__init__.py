@@ -9,7 +9,11 @@
 @License :  (C)Copyright 2022-2026
 @Desc    :  None
 """
-from .gitlib import Git
-from .ldap import LDAP
-from .mail import Mail
-from .ssh import SSH
+from .gitlib import GitManger
+from .ldap import LDAPManger
+from .mail import MailManger
+from .ssh import SSHManger
+from .redis import RedisManger
+from .mongo import MongoManger
+from .wchat import WeChatChatbot
+from .dingtalk import DingtalkChatbot

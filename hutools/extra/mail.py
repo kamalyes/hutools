@@ -15,7 +15,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 
-class Mail:
+class MailManger:
     def __init__(self, host, port, sender, password, nickname=None):
         self.host = host
         self.port = int(port)

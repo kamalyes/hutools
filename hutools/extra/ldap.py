@@ -12,7 +12,7 @@
 import ldap
 
 
-class LDAP:
+class LDAPManger:
     def __init__(self, host, port, rules, admin_dn, password, base_dn):
         self.host = host
         self.port = port
